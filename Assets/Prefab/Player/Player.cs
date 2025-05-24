@@ -9,54 +9,25 @@ public class Player : MonoBehaviour
     PlayerInput playerInput;
 
     [SerializeField] Transform[] LaneTransforms;
+    Vector3 Destination;
+    int CurrentLaneIndex;
 
     [SerializeField] float MoveSpeed = 20.0f;
-
     [SerializeField] float JumpHeight = 2.5f;
 
 
     [SerializeField] Transform GroundCheckTransform;
-
     [SerializeField] [Range(0, 1)] float GroundCheckRadious = 0.2f;
-
     [SerializeField] LayerMask GroundCheckLayerMask;
+
     [SerializeField] Vector3 BlockageCheckHalfExtend;
     [SerializeField] string BlockageCheckTag = "Threat";
 
-    private bool isJumpBoosted = false; //Flag to track active jump boost
-    public event Action<float> OnJumpBoostStarted;
-    public event Action OnJumpBoostEnded;
-    public void ChangeJumpHeight(float JumpChange, float duration)
-    {
-        if (!isJumpBoosted) // Only apply if no jump boost is active
-        {
-            isJumpBoosted = true;
-            JumpHeight += JumpChange;
-            OnJumpBoostStarted?.Invoke(duration); // Notify listeners
-            StartCoroutine(RemoveSpeedChange(JumpChange, duration));
-        }
-    }
-
-    IEnumerator RemoveSpeedChange(float JumpChangeAtm, float waitTime)
-    {
-        float remainingTime = waitTime;
-        while (remainingTime > 0)
-        {
-            //Debug.Log($"Jump boost active: {remainingTime:F1} seconds remaining");
-            yield return new WaitForSeconds(1.0f); // Update every second
-            remainingTime -= 1.0f;
-        }
-        JumpHeight -= JumpChangeAtm;
-        isJumpBoosted = false;
-        OnJumpBoostEnded?.Invoke(); // Notify listeners
-    }
-    Vector3 Destination;
-
-    int CurrentLaneIndex;
+    [SerializeField] InGameUI playerUI;
 
     //Reference of animator
     Animator animator;
-
+    //Camera reference
     Camera playerCamera;
     Vector3 playerCameraOffset;
     private void OnEnable()
@@ -73,11 +44,13 @@ public class Player : MonoBehaviour
     {
         playerInput.Disable();
     }
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         playerInput.gameplay.Move.performed += MovePerformed;
         playerInput.gameplay.Jump.performed += JumpPerformed;
+        playerInput.gameplay.Pause.performed += TogglePause;
+
         for (int i = 0; i < LaneTransforms.Length; i++)
         {
             if (LaneTransforms[i].position == transform.position)
@@ -90,6 +63,16 @@ public class Player : MonoBehaviour
 
         playerCamera = Camera.main;
         playerCameraOffset = playerCamera.transform.position - transform.position;
+    }
+    //Pause
+    private void TogglePause(InputAction.CallbackContext obj)
+    {
+        GameMode gameMode = GameplayStatics.GetGameMode();
+        if(gameMode != null && !gameMode.IsGameOver())
+        {
+            gameMode.TogglePause();
+            playerUI.SignalPause(gameMode.IsGamePaused());
+        }
     }
 
     private void JumpPerformed(InputAction.CallbackContext context)
@@ -112,8 +95,8 @@ public class Player : MonoBehaviour
         {
             return;
         }
-
-            float InputValue = context.ReadValue<float>();
+        
+        float InputValue = context.ReadValue<float>();
         int GoalIndex = CurrentLaneIndex;
         //Debug.Log($"move action performed, with value {InputValue}.");
         if (InputValue > 0)
@@ -140,7 +123,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Lerping 
-        //transform.position = Vector3.Lerp(transform.position, Destination, Time.deltaTime * MoveSpeed);
         float TransformX = Mathf.Lerp(transform.position.x, Destination.x, Time.deltaTime * MoveSpeed);
         transform.position = new Vector3(TransformX, transform.position.y, transform.position.z);
         //ground check
@@ -155,9 +137,8 @@ public class Player : MonoBehaviour
             animator.SetBool("IsOnGround", true);
             //Debug.Log("Player is on ground ");
         }
-
     }
-
+    //Camera follow player
     private void LateUpdate()
     {
         playerCamera.transform.position = transform.position + playerCameraOffset;
@@ -168,5 +149,33 @@ public class Player : MonoBehaviour
         //ground check Physics CheckSphere
         return Physics.CheckSphere(GroundCheckTransform.position, GroundCheckRadious, GroundCheckLayerMask);
 
+    }
+    //JumpBoost function
+    private bool isJumpBoosted = false;//Flag to track active jump boost
+    public event Action<float> OnJumpBoostStarted;
+    public event Action OnJumpBoostEnded;
+    public void ChangeJumpHeight(float JumpChange, float duration)
+    {
+        if (!isJumpBoosted)//Only apply if no jump boost is active
+        {
+            isJumpBoosted = true;
+            JumpHeight += JumpChange;
+            OnJumpBoostStarted?.Invoke(duration);//Notify listeners
+            StartCoroutine(RemoveSpeedChange(JumpChange, duration));
+        }
+    }
+
+    IEnumerator RemoveSpeedChange(float JumpChangeAtm, float waitTime)
+    {
+        float remainingTime = waitTime;
+        while (remainingTime > 0)
+        {
+            //Debug.Log($"Jump boost active: {remainingTime:F1} seconds remaining");
+            yield return new WaitForSeconds(1.0f);// Update every second
+            remainingTime -= 1.0f;
+        }
+        JumpHeight -= JumpChangeAtm;
+        isJumpBoosted = false;
+        OnJumpBoostEnded?.Invoke();//Notify listeners
     }
 }

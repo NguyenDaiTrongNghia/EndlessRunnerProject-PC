@@ -236,9 +236,11 @@ MonoBehaviour:
   - {fileID: 2663655670227537619}
   - {fileID: 9054884104026867950}
   pickups:
-  - {fileID: 1898698196458647016, guid: f6d4a1787bf38a6469d8bedf5de70881, type: 3}
+  - {fileID: -2303135317247446524, guid: f6d4a1787bf38a6469d8bedf5de70881, type: 3}
   - {fileID: -1704056899936430864, guid: 0d2b7e77ecd72ab44ba8900c18c45c60, type: 3}
-  - {fileID: 7931503847059011847, guid: 0e60d59f568c7ce43b8a624b8f75050d, type: 3}
+  - {fileID: 2565927225392328183, guid: 90c2e52fe28b2be4bb0d0573da1303b2, type: 3}
+  - {fileID: 6831319777780817977, guid: 0e91246e1b0f8a644ab437b8a6426d8e, type: 3}
+  - {fileID: -4243665359057215071, guid: 699d6ef13927d854e9032dd1a644ef72, type: 3}
 --- !u!54 &8512041368525721413
 Rigidbody:
   m_ObjectHideFlags: 0

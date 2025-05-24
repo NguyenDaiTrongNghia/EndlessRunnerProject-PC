@@ -18,15 +18,15 @@ public class WorldGenerator : MonoBehaviour
 
     [Header("Road Blocks")]
     //[SerializeField] float EvnMoveSpeed = 4f;
-    [SerializeField] Transform StartingPoint;
-    [SerializeField] Transform EndPoint;
+    [SerializeField] Transform StartingPoint;//
+    [SerializeField] Transform EndPoint; //
     [SerializeField] RoadSpawnDefination[] roadBlocks;
     float RoadWeightTotalWeight;
 
     [Header("Buildings")]
-    [SerializeField] GameObject[] buildings;   
-    [SerializeField] Transform[] buildingSpawnPoints;
-    [SerializeField] Vector2 buildingSpawnScaleRange = new Vector2(0.6f, 0.8f);
+    [SerializeField] GameObject[] buildings;//
+    [SerializeField] Transform[] buildingSpawnPoints;//
+    [SerializeField] Vector2 buildingSpawnScaleRange = new Vector2(0.6f, 0.8f);//
 
     [Header("Street Lights")]
     [SerializeField] GameObject StreetLight;
@@ -69,7 +69,7 @@ public class WorldGenerator : MonoBehaviour
         return AvailableSpawnPoints.ToArray();
     }
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         RoadWeightTotalWeight = 0;
@@ -77,27 +77,28 @@ public class WorldGenerator : MonoBehaviour
         {
             RoadWeightTotalWeight += roadBlocks[i].Weight;
         }
-        Vector3 nextBlockPosition = StartingPoint.position;
-        float EndPointDistance = Vector3.Distance(StartingPoint.position, EndPoint.position);
-        MoveDirection = (EndPoint.position - StartingPoint.position).normalized;
-        while (Vector3.Distance(StartingPoint.position, nextBlockPosition) < EndPointDistance)
+        //Spawn all the road from the starting point to end point
+        Vector3 nextBlockPosition = StartingPoint.position;//
+        float EndPointDistance = Vector3.Distance(StartingPoint.position, EndPoint.position);//
+        MoveDirection = (EndPoint.position - StartingPoint.position).normalized;//
+        while (Vector3.Distance(StartingPoint.position, nextBlockPosition) < EndPointDistance)//
         {
-            GameObject pickedBlock = roadBlocks[0].RoadBlock;
-            GameObject newBlock = Instantiate(pickedBlock);
-            newBlock.transform.position = nextBlockPosition;
-            MovementComp moveComp = newBlock.GetComponent<MovementComp>();
-            if (moveComp != null)
+            GameObject pickedBlock = roadBlocks[0].RoadBlock;//
+            GameObject newBlock = Instantiate(pickedBlock);//
+            newBlock.transform.position = nextBlockPosition;//
+            MovementComp moveComp = newBlock.GetComponent<MovementComp>();//
+            if (moveComp != null)//
             {
                 //moveComp.SetMoveSpeed(EvnMoveSpeed);
-                moveComp.SetDestination(EndPoint.position);
-                moveComp.SetMoveDirect(MoveDirection);
+                moveComp.SetDestination(EndPoint.position);//
+                moveComp.SetMoveDirect(MoveDirection);//
             }
 
-            SpawnBuildings(newBlock);
-            SpawnStreetLights(newBlock);
+            SpawnBuildings(newBlock);//
+            SpawnStreetLights(newBlock);//
 
-            float blockLength = newBlock.GetComponent<Renderer>().bounds.size.z;
-            nextBlockPosition += MoveDirection * blockLength;
+            float blockLength = newBlock.GetComponent<Renderer>().bounds.size.z;//
+            nextBlockPosition += MoveDirection * blockLength;//
         }
 
         StartSpawnElements();
@@ -138,7 +139,7 @@ public class WorldGenerator : MonoBehaviour
             yield return new WaitForSeconds(elementToSpawn.SpawnInterval);
         }
     }
-
+    //Spawn the newblock and set move direction and destination, will be triggered in the OnTriggerExit
     GameObject SpawnNewBlock(Vector3 SpawnPosition, Vector3 MoveDir)
     {
         GameObject pickedBlock = GetRandomBlockToSpawn();
@@ -152,8 +153,8 @@ public class WorldGenerator : MonoBehaviour
             moveComp.SetMoveDirect(MoveDir);
         }
 
-        SpawnBuildings(newBlock);
-        SpawnStreetLights(newBlock);
+        SpawnBuildings(newBlock);//
+        SpawnStreetLights(newBlock);//
 
         return newBlock;
     }
@@ -191,12 +192,10 @@ public class WorldGenerator : MonoBehaviour
         foreach (Transform BuildingSpawnPoint in buildingSpawnPoints)
         {
             Vector3 BuildingSpawnLocation = ParentBlock.transform.position + (BuildingSpawnPoint.position - StartingPoint.position);
-            int RotationOffsetBy90 = Random.Range(0, 3);
-            Quaternion BuildingSpawnRotation = Quaternion.Euler(0, RotationOffsetBy90 * 90, 0);
-            Vector3 BuildingSpawnSize = Vector3.one * Random.Range(buildingSpawnScaleRange.x, buildingSpawnScaleRange.y);
+            Quaternion BuidlingSpawnRot = Quaternion.LookRotation((StartingPoint.position - BuildingSpawnPoint.position).normalized, Vector3.up);
             int BuildingPick = Random.Range(0, buildings.Length);
-
-            GameObject newBuilding = Instantiate(buildings[BuildingPick], BuildingSpawnLocation, BuildingSpawnRotation, ParentBlock.transform);
+            GameObject newBuilding = Instantiate(buildings[BuildingPick], BuildingSpawnLocation, BuidlingSpawnRot, ParentBlock.transform);
+            Vector3 BuildingSpawnSize = Vector3.one * Random.Range(buildingSpawnScaleRange.x, buildingSpawnScaleRange.y);
             newBuilding.transform.localScale = BuildingSpawnSize;
         }
     }
@@ -206,10 +205,9 @@ public class WorldGenerator : MonoBehaviour
     {
         
     }
-
+    //Trigger the SpawnDetect and spawn newblock moving to the end point
     private void OnTriggerExit(Collider other)
     {
-        
         if(other.gameObject!=null && other.gameObject.tag == "RoadBlock")
         {
             GameObject newBlock = SpawnNewBlock(other.transform.position, MoveDirection);

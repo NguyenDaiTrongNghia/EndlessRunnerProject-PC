@@ -6,10 +6,9 @@ using UnityEngine;
 
 public class MovementComp : MonoBehaviour
 {
-    [SerializeField] float MoveSpeed = 20f;
-    [SerializeField] Vector3 MoveDirect = Vector3.forward;
-
-    [SerializeField] Vector3 Destination;
+    [SerializeField] float MoveSpeed = 20f;//
+    [SerializeField] Vector3 MoveDirect = Vector3.forward;//
+    [SerializeField] Vector3 Destination;//
     // Start is called before the first frame update
     void Start()
     {
@@ -21,26 +20,26 @@ public class MovementComp : MonoBehaviour
         }
     }
 
-    public void SetMoveDirect(Vector3 dir)
+    public void SetMoveDirect(Vector3 dir)//
     {
         MoveDirect = dir;
     }
 
-    public void SetDestination(Vector3 newDestination)
+    public void SetDestination(Vector3 newDestination)//
     {
         Destination = newDestination;
     }
     // Update is called once per frame
     void Update()
     {
-        transform.position += MoveDirect * MoveSpeed * Time.deltaTime;
-        if(Vector3.Dot((Destination - transform.position).normalized, MoveDirect) < 0)
+        transform.position += MoveDirect * MoveSpeed * Time.deltaTime;//
+        if(Vector3.Dot((Destination - transform.position).normalized, MoveDirect) < 0)//
         {
-            Destroy(gameObject);
+            Destroy(gameObject);//
         }
     }
 
-    internal void SetMoveSpeed(float newMoveSpeed)
+    internal void SetMoveSpeed(float newMoveSpeed)//
     {
         MoveSpeed = newMoveSpeed;
     }

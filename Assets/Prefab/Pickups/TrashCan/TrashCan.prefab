@@ -54,6 +54,8 @@ MonoBehaviour:
   CollisionPushSpeed: 20
   DestroyDelay: 3
   CollisionTorque: {x: 2, y: 2, z: 2}
+  SpeedEffectTrash: 20
+  SpeedEffectDurationTrash: 5
 --- !u!114 &4826627929051461277
 MonoBehaviour:
   m_ObjectHideFlags: 0

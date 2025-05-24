@@ -26,7 +26,7 @@ public class PowerUpDisplay : MonoBehaviour
             yield return null;
             remaining -= Time.deltaTime;
         }
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     public void Stop()

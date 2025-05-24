@@ -8,6 +8,11 @@ public class InGameUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI ScoreText;
     [SerializeField] TextMeshProUGUI TimerText;
+    [SerializeField] UISwitcher menuSwitcher;
+    [SerializeField] Transform inGameUI;
+    [SerializeField] Transform pauseUI;
+    [SerializeField] Transform gameoverUI;
+
     [Header("Power-Up UI Elements")]
     [SerializeField] PowerUpDisplay JumpBoostDisplay;
     [SerializeField] PowerUpDisplay SpeedBoostDisplay;
@@ -16,6 +21,8 @@ public class InGameUI : MonoBehaviour
 
     void Start()
     {
+        GameplayStatics.GetGameMode().onGameOver += OnGameOver;
+
         ScoreKeeper scoreKeeper = FindObjectOfType<ScoreKeeper>();
         if(scoreKeeper != null)
         {
@@ -44,11 +51,15 @@ public class InGameUI : MonoBehaviour
             Magnet.OnMagnetEnded += () => MagnetDisplay.Stop();
         }
 
-
-        // Hide all power-up UIs initially
+        //Hide all power-up UIs initially
         MagnetDisplay.gameObject.SetActive(false);
         JumpBoostDisplay.gameObject.SetActive(false);
         SpeedBoostDisplay.gameObject.SetActive(false);
+    }
+
+    private void OnGameOver()
+    {
+        menuSwitcher.SetActiveUI(gameoverUI);
     }
 
     private void UpdateScoreText(int newVal)
@@ -60,9 +71,32 @@ public class InGameUI : MonoBehaviour
     {
         TimerText.SetText($"Score: {newTime:F0}");
     }
-    // Update is called once per frame
-    void Update()
+
+    internal void SignalPause(bool isGamePaused)
     {
-        
+        if (isGamePaused)
+        {
+            menuSwitcher.SetActiveUI(pauseUI);
+        }
+        else
+        {
+            menuSwitcher.SetActiveUI(inGameUI);
+        }
+    }
+
+    public void ResumeGame()
+    {
+        GameplayStatics.GetGameMode().SetGamePause(false);
+        menuSwitcher.SetActiveUI(inGameUI);
+    }
+
+    public void BackToMainMenu()
+    {
+        GameplayStatics.GetGameMode().BackToMainMenu();
+    }
+
+    public void RestartLevel()
+    {
+        GameplayStatics.GetGameMode().RestartLevel();
     }
 }
