@@ -50,12 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _SpawnInterval: 3.21
   movementComp: {fileID: 4826627929051461277}
-  scoreEffect: -2
+  coinEffect: -2
   CollisionPushSpeed: 20
   DestroyDelay: 3
   CollisionTorque: {x: 2, y: 2, z: 2}
-  SpeedEffectTrash: 20
-  SpeedEffectDurationTrash: 5
 --- !u!114 &4826627929051461277
 MonoBehaviour:
   m_ObjectHideFlags: 0

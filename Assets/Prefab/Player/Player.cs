@@ -91,14 +91,13 @@ public class Player : MonoBehaviour
 
     private void MovePerformed(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (!isOnGround())
-        {
-            return;
-        }
+        //if (!isOnGround())
+        //{
+        //    return;
+        //}
         
         float InputValue = context.ReadValue<float>();
         int GoalIndex = CurrentLaneIndex;
-        //Debug.Log($"move action performed, with value {InputValue}.");
         if (InputValue > 0)
         {
             if (GoalIndex == LaneTransforms.Length - 1) return;
@@ -111,9 +110,12 @@ public class Player : MonoBehaviour
         }
 
         Vector3 GoalPos = LaneTransforms[GoalIndex].position;
-        if(GameplayStatics.IsPositionOccupied(GoalPos, BlockageCheckHalfExtend, BlockageCheckTag))
+        if (transform.position.y <= 2f)
         {
-            return;
+            if (GameplayStatics.IsPositionOccupied(GoalPos, BlockageCheckHalfExtend, BlockageCheckTag, includeNoSpawn: false))
+            {
+                return;
+            }
         }
 
         CurrentLaneIndex = GoalIndex;
@@ -139,7 +141,7 @@ public class Player : MonoBehaviour
         }
     }
     //Camera follow player
-    private void LateUpdate()
+    private void LateUpdate()//
     {
         playerCamera.transform.position = transform.position + playerCameraOffset;
     }
@@ -151,29 +153,23 @@ public class Player : MonoBehaviour
 
     }
     //JumpBoost function
-    private bool isJumpBoosted = false;//Flag to track active jump boost
+    private bool isJumpBoosted = false;
     public event Action<float> OnJumpBoostStarted;
     public event Action OnJumpBoostEnded;
     public void ChangeJumpHeight(float JumpChange, float duration)
     {
-        if (!isJumpBoosted)//Only apply if no jump boost is active
+        if (!isJumpBoosted)
         {
             isJumpBoosted = true;
             JumpHeight += JumpChange;
-            OnJumpBoostStarted?.Invoke(duration);//Notify listeners
+            OnJumpBoostStarted?.Invoke(duration);
             StartCoroutine(RemoveSpeedChange(JumpChange, duration));
         }
     }
 
     IEnumerator RemoveSpeedChange(float JumpChangeAtm, float waitTime)
     {
-        float remainingTime = waitTime;
-        while (remainingTime > 0)
-        {
-            //Debug.Log($"Jump boost active: {remainingTime:F1} seconds remaining");
-            yield return new WaitForSeconds(1.0f);// Update every second
-            remainingTime -= 1.0f;
-        }
+        yield return new WaitForSeconds(waitTime);
         JumpHeight -= JumpChangeAtm;
         isJumpBoosted = false;
         OnJumpBoostEnded?.Invoke();//Notify listeners

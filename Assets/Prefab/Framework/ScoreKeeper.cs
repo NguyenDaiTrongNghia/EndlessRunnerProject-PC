@@ -5,25 +5,34 @@ using TMPro;
 
 public class ScoreKeeper : MonoBehaviour
 {
-    public delegate void OnScoreChanged(int newVal);
-    public event OnScoreChanged onScoreChanged;
-    private int score;
+    public delegate void OnCoinChanged(int newVal);
+    public event OnCoinChanged onCoinChanged;
+    private int coin;
 
     public delegate void OnTimeChanged(float newTime);
     public event OnTimeChanged onTimeChanged;
-    public float CurrentTime;
+    public float timeScore;
 
-    public void ChangeScore(int amt)
+    public float TimeScore
     {
-        score += amt;
+        get { return timeScore; }
+    }
+
+    public void ChangeCoin(int amt)
+    {
+        coin += amt;
+        if(coin < 0)
+        {
+            coin = 0;
+        }
         //Debug.Log($"The score has changed {score}");
-        onScoreChanged?.Invoke(score);
+        onCoinChanged?.Invoke(coin);
     }
 
     void Update()
     {
-        CurrentTime = CurrentTime += Time.deltaTime;
-        onTimeChanged?.Invoke(CurrentTime);
+        timeScore += Time.deltaTime;
+        onTimeChanged?.Invoke(timeScore);
     }
     
 }

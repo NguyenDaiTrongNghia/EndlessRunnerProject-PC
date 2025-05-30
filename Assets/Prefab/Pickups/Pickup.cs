@@ -4,33 +4,33 @@ using UnityEngine;
 
 public class Pickup : Spawnable
 {
-    [SerializeField] int scoreEffect;
+    [SerializeField] int coinEffect;
 
-    bool bAdjusted = false;
+    bool bAdjustedHigher = false;
 
-    protected virtual void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)//
     {
         if(other.gameObject.tag == "Player")
         {
             ScoreKeeper scoreKeeper = FindObjectOfType<ScoreKeeper>();
-            if (scoreKeeper != null && scoreEffect != 0)
+            if (scoreKeeper != null && coinEffect != 0)
             {
-                scoreKeeper.ChangeScore(scoreEffect);
+                scoreKeeper.ChangeCoin(coinEffect);
             }
 
             PickedUpBy(other.gameObject);
         }
 
-        if(other.gameObject.tag == "Threat" && !bAdjusted)
+        if(other.gameObject.tag == "Threat" && !bAdjustedHigher)
         {
             //Debug.Log("Over lap");
             Collider col = other.GetComponent<Collider>();
             if(col!=null)
             {
                 transform.position = col.bounds.center + col.bounds.extents.y  * Vector3.up;
-                bAdjusted = true;
+                bAdjustedHigher = true;
             }
-        }
+        } 
     }
 
     protected virtual void PickedUpBy(GameObject picker)

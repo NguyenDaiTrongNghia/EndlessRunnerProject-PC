@@ -10,7 +10,7 @@ public class MovementComp : MonoBehaviour
     [SerializeField] Vector3 MoveDirect = Vector3.forward;//
     [SerializeField] Vector3 Destination;//
     // Start is called before the first frame update
-    void Start()
+    void Start()//
     {
         SpeedControl speedController = FindObjectOfType<SpeedControl>();
         if(speedController!=null)

@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6487a518631e5554f85dd34a19cad2e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreText: {fileID: 1242674082461633567}
+  CoinText: {fileID: 1242674082461633567}
   TimerText: {fileID: 27567750544445253}
   menuSwitcher: {fileID: 8383566021111905222}
   inGameUI: {fileID: 6655311058949312626}
@@ -1476,7 +1476,7 @@ GameObject:
   - component: {fileID: 3053891026006394131}
   - component: {fileID: 1242674082461633567}
   m_Layer: 5
-  m_Name: ScoreText
+  m_Name: CoinText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2407,7 +2407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 39, y: 68}
+  m_AnchoredPosition: {x: 14.998047, y: 66.099976}
   m_SizeDelta: {x: 227.4417, y: 40.851807}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &6255999003929227294

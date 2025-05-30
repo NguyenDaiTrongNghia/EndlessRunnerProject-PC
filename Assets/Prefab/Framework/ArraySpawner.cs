@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ArraySpawner : MonoBehaviour
 {
-    [SerializeField] int Amount = 10;
-    [SerializeField] float Gap = 1f;
+    [SerializeField] int Amount = 10;//
+    [SerializeField] float Gap = 1f;//
     // Start is called before the first frame update
     void Start()
     {

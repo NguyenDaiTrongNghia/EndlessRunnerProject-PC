@@ -5,12 +5,12 @@ using UnityEngine;
 public static class GameplayStatics
 {
     static GameMode gameMode;
-    public static bool IsPositionOccupied(Vector3 position, Vector3 DetectionHalfExtend, string OccupationcheckTag)
+    public static bool IsPositionOccupied(Vector3 position, Vector3 detectionHalfExtend, string occupationCheckTag, bool includeNoSpawn = true)
     {
-        Collider[] cols = Physics.OverlapBox(position,DetectionHalfExtend, Quaternion.identity);
+        Collider[] cols = Physics.OverlapBox(position, detectionHalfExtend, Quaternion.identity);
         foreach (Collider col in cols)
         {
-            if (col.gameObject.tag == OccupationcheckTag || col.gameObject.tag == "NoSpawn")
+            if (col.gameObject.CompareTag(occupationCheckTag) || (includeNoSpawn && col.gameObject.CompareTag("NoSpawn")))
             {
                 return true;
             }

@@ -6,26 +6,26 @@ using Random = UnityEngine.Random;
 
 public class TrainSegment : MonoBehaviour
 {
-    [SerializeField] Mesh HeadMesh;
-    [SerializeField] Mesh[] SegmentMeshes;
+    [SerializeField] Mesh HeadMesh;//
+    [SerializeField] Mesh[] SegmentMeshes;//
 
-    [SerializeField] MeshFilter TrainMesh;
-    [SerializeField] BoxCollider TrainCollider;
-    [SerializeField] MovementComp MovementComponent;
+    [SerializeField] MeshFilter TrainMesh;//
+    [SerializeField] BoxCollider TrainCollider;//
+    [SerializeField] MovementComp MovementComponent;//
     bool bIsHead = false;
     // Start is called before the first frame update
     void Start()
     {
-        RandomTrainMesh();
+        RandomTrainMesh();//
     }
 
-    private void RandomTrainMesh()
+    private void RandomTrainMesh()//
     {
         if (bIsHead)
             return;
 
-        int pick = Random.Range(0, SegmentMeshes.Length);
-        TrainMesh.mesh = SegmentMeshes[pick];
+        int pick = Random.Range(0, SegmentMeshes.Length);//
+        TrainMesh.mesh = SegmentMeshes[pick];//
     }
 
     // Update is called once per frame
@@ -34,11 +34,11 @@ public class TrainSegment : MonoBehaviour
         
     }
 
-    public float GetSegmentLength()
+    public float GetSegmentLength()//
     {
         return TrainCollider.size.z;    }
 
-    internal void SetHead()
+    internal void SetHead()//
     {
         TrainMesh.mesh = HeadMesh;
         bIsHead = true;

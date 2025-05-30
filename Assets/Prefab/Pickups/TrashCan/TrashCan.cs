@@ -9,7 +9,6 @@ public class TrashCan : Pickup
     [SerializeField] Vector3 CollisionTorque = new Vector3(2f,2f,2f);
     protected override void PickedUpBy(GameObject picker)
     {
-        //base.PickedUpBy(picker);
         GetMovementComponent().enabled = false;
         GetComponent<Collider>().enabled = false;
         Rigidbody rigidBody = GetComponent<Rigidbody>();

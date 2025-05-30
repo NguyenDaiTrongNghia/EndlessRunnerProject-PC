@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerMagnetEffect : MonoBehaviour
 {
-    [SerializeField] float magnetDuration = 5f;
     [SerializeField] float magnetRadius = 10f;
 
     private bool isMagnetActive = false;
@@ -28,11 +27,11 @@ public class PlayerMagnetEffect : MonoBehaviour
         }
     }
 
-    public void ActivateMagnet()
+    public void ActivateMagnet(float duration)
     {
         isMagnetActive = true;
-        timer = magnetDuration;
-        OnMagnetStarted?.Invoke(magnetDuration);
+        timer = duration;
+        OnMagnetStarted?.Invoke(duration);
     }
 
     void AttractCoins()

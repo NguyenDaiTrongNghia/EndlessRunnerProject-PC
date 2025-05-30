@@ -5,49 +5,60 @@ using UnityEngine;
 
 public class SpeedControl : MonoBehaviour
 {
-    public delegate void OnGlobalSpeedChanged(float newSpeed);
-    [SerializeField] float GlobalSpeed = 15f;
-    //private float baseSpeed; // Store the base speed
-    private bool isSpeedModified = false; // Flag to track active speed modification
+    public delegate void OnGlobalSpeedChanged(float newSpeed);//
+    [SerializeField] float GlobalSpeed = 15f;//
+    private bool isSpeedModified = false; //
 
-    public event OnGlobalSpeedChanged onGlobalSpeedChanged;
+    public event OnGlobalSpeedChanged onGlobalSpeedChanged;//
 
-    public event Action<float> OnSpeedBoostStarted;
-    public event Action OnSpeedBoostEnded;
-    //public delegate void OnSpeedBoostStarted(float newSpeed, float duration);
-    //public event OnSpeedBoostStarted onSpeedBoostStarted;
+    public event Action<float> OnSpeedBoostStarted;//
+    public event Action OnSpeedBoostEnded;//
 
-    public void ChangeGlobalSpeed(float SpeedChange, float duration)
+    public void ChangeGlobalSpeed(float SpeedChange, float duration)//
     {
-        //Only apply speed change if no other speed modification is active
+        
         if (!isSpeedModified)
         {
             isSpeedModified = true;
             GlobalSpeed += SpeedChange;
             InformSpeedChange();
-            // Notify with duration
             OnSpeedBoostStarted?.Invoke(duration);
-
             StartCoroutine(RemoveSpeedChange(SpeedChange, duration));
         }
     }
 
-    public float GetGlobalSpeed()
-    {
-        return GlobalSpeed;
-    }
-
-  IEnumerator RemoveSpeedChange(float SpeedChangeAmt, float waitTime)
+    IEnumerator RemoveSpeedChange(float SpeedChangeAmt, float waitTime)//
     {
         yield return new WaitForSeconds(waitTime);
         GlobalSpeed -= SpeedChangeAmt;
         isSpeedModified = false;
-        OnSpeedBoostEnded?.Invoke(); // Notify listeners
+        OnSpeedBoostEnded?.Invoke();
         InformSpeedChange();
     }
 
-    private void InformSpeedChange()
+
+    public float GetGlobalSpeed()//
+    {
+        return GlobalSpeed;
+    }
+
+    private void InformSpeedChange()//
     {
         onGlobalSpeedChanged?.Invoke(GlobalSpeed);
+    }
+
+    //Change global speed to 20 after 300 seconds
+    public void SetGlobalSpeedAfter300s(float newspeed)
+    {
+        GlobalSpeed = newspeed;
+        onGlobalSpeedChanged?.Invoke(GlobalSpeed);
+    }
+    void SetGameSpeedAfter300s()
+    {
+        SetGlobalSpeedAfter300s(20);
+    }
+    private void Start()
+    {
+        Invoke("SetGameSpeedAfter300s", 300);
     }
 }

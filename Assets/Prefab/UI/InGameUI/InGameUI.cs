@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class InGameUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI ScoreText;
-    [SerializeField] TextMeshProUGUI TimerText;
+    [SerializeField] TextMeshProUGUI CoinText;//
+    [SerializeField] TextMeshProUGUI TimerText;//
     [SerializeField] UISwitcher menuSwitcher;
     [SerializeField] Transform inGameUI;
     [SerializeField] Transform pauseUI;
@@ -26,28 +26,28 @@ public class InGameUI : MonoBehaviour
         ScoreKeeper scoreKeeper = FindObjectOfType<ScoreKeeper>();
         if(scoreKeeper != null)
         {
-            scoreKeeper.onScoreChanged += UpdateScoreText;
+            scoreKeeper.onCoinChanged += UpdateCoinText;
             scoreKeeper.onTimeChanged += UpdateTimerText;
         }
 
         Player player = FindObjectOfType<Player>();
         if (player != null)
         {
-            player.OnJumpBoostStarted += (duration) => JumpBoostDisplay.Show("Jump: ", duration);
+            player.OnJumpBoostStarted += (duration) => JumpBoostDisplay.Show("Jump", duration);
             player.OnJumpBoostEnded += () => JumpBoostDisplay.Stop();
         }
 
         SpeedControl speedControl = FindObjectOfType<SpeedControl>();
         if (speedControl != null)
         {
-            speedControl.OnSpeedBoostStarted += (duration) => SpeedBoostDisplay.Show("Speed: ", duration);
+            speedControl.OnSpeedBoostStarted += (duration) => SpeedBoostDisplay.Show("Speed", duration);
             speedControl.OnSpeedBoostEnded += () => SpeedBoostDisplay.Stop();
         }
 
         PlayerMagnetEffect Magnet = FindObjectOfType<PlayerMagnetEffect>();
         if (Magnet != null)
         {
-            Magnet.OnMagnetStarted += (duration) => MagnetDisplay.Show("Magnet: ", duration);
+            Magnet.OnMagnetStarted += (duration) => MagnetDisplay.Show("Magnet", duration);
             Magnet.OnMagnetEnded += () => MagnetDisplay.Stop();
         }
 
@@ -62,9 +62,9 @@ public class InGameUI : MonoBehaviour
         menuSwitcher.SetActiveUI(gameoverUI);
     }
 
-    private void UpdateScoreText(int newVal)
+    private void UpdateCoinText(int newVal)
     {
-        ScoreText.SetText($"Coin: {newVal}");
+        CoinText.SetText($"Coin: {newVal}");
     }
 
     private void UpdateTimerText(float newTime)

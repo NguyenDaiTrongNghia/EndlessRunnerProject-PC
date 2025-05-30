@@ -18,8 +18,16 @@ public class GameMode : MonoBehaviour
     public void GameOver()
     {
         SetGamePause(true);
+        UpdateLeaderBoard();
+
         bIsGameOver = true;
         onGameOver?.Invoke();
+    }
+
+    private void UpdateLeaderBoard()
+    {
+        float score = GetComponent<ScoreKeeper>().TimeScore;
+        SaveDataManager.SaveNewLeadBoardEntry(SaveDataManager.GetActivePlayerName(), DateTime.Now, score);
     }
 
     internal void LoadFirstScene()

@@ -17,7 +17,6 @@ public class WorldGenerator : MonoBehaviour
     }
 
     [Header("Road Blocks")]
-    //[SerializeField] float EvnMoveSpeed = 4f;
     [SerializeField] Transform StartingPoint;//
     [SerializeField] Transform EndPoint; //
     [SerializeField] RoadSpawnDefination[] roadBlocks;
@@ -29,18 +28,18 @@ public class WorldGenerator : MonoBehaviour
     [SerializeField] Vector2 buildingSpawnScaleRange = new Vector2(0.6f, 0.8f);//
 
     [Header("Street Lights")]
-    [SerializeField] GameObject StreetLight;
-    [SerializeField] Transform[] StreetLightSpawnPoints;
+    [SerializeField] GameObject StreetLight;//
+    [SerializeField] Transform[] StreetLightSpawnPoints;//
 
     [Header("Threats")]
-    [SerializeField] Vector3 OccupationDetectionHalfExtend;
-    [SerializeField] Threat[] Threats;
-    [SerializeField] Transform[] Lanes;
+    [SerializeField] Threat[] Threats;//
+    [SerializeField] Transform[] Lanes;// 
+    [SerializeField] Vector3 OccupationDetectionHalfExtend;//
     Vector3 MoveDirection;
 
     [Header("Pickups")]
     [SerializeField] Pickup[] pickups;
-    bool GetRandomSpawnPoint(out Vector3 spawnPoint, string OccupationcheckTag)
+    bool GetRandomSpawnPoint(out Vector3 spawnPoint, string OccupationcheckTag)//
     {
         Vector3[] spawnPoints = GetAvailableSpawnPoints(OccupationcheckTag);
         if(spawnPoints.Length == 0)
@@ -51,11 +50,11 @@ public class WorldGenerator : MonoBehaviour
 
         int pick = Random.Range(0, spawnPoints.Length);
         spawnPoint = spawnPoints[pick];
-        return true;
+        return true;  
 
     }
-
-    Vector3[] GetAvailableSpawnPoints(string OccupationcheckTag)
+     
+    Vector3[] GetAvailableSpawnPoints(string OccupationcheckTag)//
     {
         List<Vector3> AvailableSpawnPoints = new List<Vector3>();
         foreach(Transform spawnTrans in Lanes)
@@ -101,14 +100,14 @@ public class WorldGenerator : MonoBehaviour
             nextBlockPosition += MoveDirection * blockLength;//
         }
 
-        StartSpawnElements();
+        StartSpawnElements();//
 
-        Pickup newPickup = Instantiate(pickups[0], StartingPoint.position, Quaternion.identity);
-        newPickup.GetComponent<MovementComp>().SetDestination(EndPoint.position);
-        newPickup.GetComponent<MovementComp>().SetMoveDirect(MoveDirection);
+        //Pickup newPickup = Instantiate(pickups[0], StartingPoint.position, Quaternion.identity);
+        //newPickup.GetComponent<MovementComp>().SetDestination(EndPoint.position);
+        //newPickup.GetComponent<MovementComp>().SetMoveDirect(MoveDirection);
     }
 
-    private void StartSpawnElements()
+    private void StartSpawnElements()//
     {
         //loop through all the threats
             //start periodically spawn threat based on their spawn interval
@@ -123,20 +122,19 @@ public class WorldGenerator : MonoBehaviour
         }   
     }
 
-    IEnumerator SpawnElement(Spawnable elementToSpawn)
+    IEnumerator SpawnElement(Spawnable elementToSpawn)// 
     {
-        while(true)
+        while(true)//
         {
             if(GetRandomSpawnPoint(out Vector3 spawnPoint, elementToSpawn.gameObject.tag))
             {
-                Spawnable newThreat = Instantiate(elementToSpawn, spawnPoint, Quaternion.identity);
+                Spawnable newThreat = Instantiate(elementToSpawn, spawnPoint, Quaternion.identity);//
 
-                newThreat.GetMovementComponent().SetDestination(EndPoint.position);
-                newThreat.GetMovementComponent().SetMoveDirect(MoveDirection);
+                newThreat.GetMovementComponent().SetDestination(EndPoint.position);//
+                newThreat.GetMovementComponent().SetMoveDirect(MoveDirection);//
             }
-         
 
-            yield return new WaitForSeconds(elementToSpawn.SpawnInterval);
+            yield return new WaitForSeconds(elementToSpawn.SpawnInterval);//
         }
     }
     //Spawn the newblock and set move direction and destination, will be triggered in the OnTriggerExit
@@ -176,7 +174,7 @@ public class WorldGenerator : MonoBehaviour
         return roadBlocks[pick].RoadBlock;
     }
 
-    private void SpawnStreetLights(GameObject ParentBlock)
+    private void SpawnStreetLights(GameObject ParentBlock)//
     {
         foreach (Transform StreetLightSpawnPoint in StreetLightSpawnPoints)
         {
@@ -187,7 +185,7 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    private void SpawnBuildings(GameObject ParentBlock)
+    private void SpawnBuildings(GameObject ParentBlock)//
     {
         foreach (Transform BuildingSpawnPoint in buildingSpawnPoints)
         {
@@ -206,7 +204,7 @@ public class WorldGenerator : MonoBehaviour
         
     }
     //Trigger the SpawnDetect and spawn newblock moving to the end point
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)//
     {
         if(other.gameObject!=null && other.gameObject.tag == "RoadBlock")
         {
