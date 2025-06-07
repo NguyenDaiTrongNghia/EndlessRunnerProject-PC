@@ -5,8 +5,12 @@ using UnityEngine;
 public class JumpBoost : Pickup
 {
     [SerializeField] float JumpEffectDuration = 5.0f; 
-    [SerializeField] float JumpEffect = 2.0f; 
-    
+    [SerializeField] float JumpEffect = 2.0f;
+
+    private void Start()
+    {
+        JumpEffectDuration = SaveDataManager.GetPowerUpDuration("JumpBoostDuration");
+    }
     protected override void PickedUpBy(GameObject picker)
     {
         Player jumpController = picker.GetComponent<Player>();

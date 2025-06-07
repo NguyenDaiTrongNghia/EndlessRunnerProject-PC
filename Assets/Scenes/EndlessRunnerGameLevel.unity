@@ -326,7 +326,7 @@ PrefabInstance:
       objectReference: {fileID: 1761104083}
     - target: {fileID: 439095754662050324, guid: 663a1e59ec10c5c4eaa7c0e0656a2890, type: 3}
       propertyPath: MoveSpeed
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 439095754662050324, guid: 663a1e59ec10c5c4eaa7c0e0656a2890, type: 3}
       propertyPath: LaneTransforms.Array.data[0]
@@ -383,18 +383,6 @@ PrefabInstance:
     - target: {fileID: 2173960210359709867, guid: 663a1e59ec10c5c4eaa7c0e0656a2890, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2378816986818286375, guid: 663a1e59ec10c5c4eaa7c0e0656a2890, type: 3}
-      propertyPath: magnetDuration
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2378816986818286375, guid: 663a1e59ec10c5c4eaa7c0e0656a2890, type: 3}
-      propertyPath: attractionSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 3659300818795814382, guid: 663a1e59ec10c5c4eaa7c0e0656a2890, type: 3}
-      propertyPath: m_Interpolate
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

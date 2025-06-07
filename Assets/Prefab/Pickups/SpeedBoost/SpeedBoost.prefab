@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60516d887dee08c4cb56847873980e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SpawnInterval: 54.3
+  _SpawnInterval: 36.2
   movementComp: {fileID: 5629025206476730883}
   coinEffect: 0
-  SpeedEffect: -5
+  SpeedEffect: -2.5
   SpeedEffectDuration: 5
 --- !u!114 &5629025206476730883
 MonoBehaviour:

@@ -21,7 +21,7 @@ public class InGameUI : MonoBehaviour
 
     void Start()
     {
-        GameplayStatics.GetGameMode().onGameOver += OnGameOver;
+        GameplayStatics.GetGameMode().onGameOver += OnGameOver;//
 
         ScoreKeeper scoreKeeper = FindObjectOfType<ScoreKeeper>();
         if(scoreKeeper != null)
@@ -51,28 +51,27 @@ public class InGameUI : MonoBehaviour
             Magnet.OnMagnetEnded += () => MagnetDisplay.Stop();
         }
 
-        //Hide all power-up UIs initially
         MagnetDisplay.gameObject.SetActive(false);
         JumpBoostDisplay.gameObject.SetActive(false);
         SpeedBoostDisplay.gameObject.SetActive(false);
     }
 
-    private void OnGameOver()
+    private void OnGameOver()//
     {
-        menuSwitcher.SetActiveUI(gameoverUI);
+        menuSwitcher.SetActiveUI(gameoverUI);//
     }
 
-    private void UpdateCoinText(int newVal)
+    private void UpdateCoinText(int newVal)//
     {
         CoinText.SetText($"Coin: {newVal}");
     }
 
-    private void UpdateTimerText(float newTime)
+    private void UpdateTimerText(float newTime)//
     {
         TimerText.SetText($"Score: {newTime:F0}");
     }
 
-    internal void SignalPause(bool isGamePaused)
+    internal void SignalPause(bool isGamePaused)//
     {
         if (isGamePaused)
         {
@@ -84,18 +83,18 @@ public class InGameUI : MonoBehaviour
         }
     }
 
-    public void ResumeGame()
+    public void ResumeGame()//
     {
         GameplayStatics.GetGameMode().SetGamePause(false);
         menuSwitcher.SetActiveUI(inGameUI);
     }
 
-    public void BackToMainMenu()
+    public void BackToMainMenu()//
     {
         GameplayStatics.GetGameMode().BackToMainMenu();
     }
 
-    public void RestartLevel()
+    public void RestartLevel()//
     {
         GameplayStatics.GetGameMode().RestartLevel();
     }

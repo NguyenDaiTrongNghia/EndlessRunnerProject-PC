@@ -15,56 +15,85 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] TMP_Dropdown playerList;
     [SerializeField] Transform storeMenu;
 
+    [SerializeField] TextMeshProUGUI TotalCoins;
+    [SerializeField] int TotalCoin;
+
+
+
     private void Start()
     {
-        UpdatePlayerList();
-        playerList.onValueChanged.AddListener(UpdateSaveActivePlayer);
-    }
 
+        //PlayerPrefs.SetFloat("JumpBoostDuration", 70f);
+        PlayerPrefs.Save();
+        UpdatePlayerList();//
+        playerList.onValueChanged.AddListener(UpdateSaveActivePlayer);//
+        UpdateTotalCoinDisplay();
+    }
+    public void AddCoin()
+    {
+        PlayerPrefs.SetInt("TotalCoins", 5000);
+        PlayerPrefs.Save();
+        UpdateTotalCoinDisplay();
+    }
+    public void ResetData()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        UpdateTotalCoinDisplay();
+    }
+    public void UpdateTotalCoinDisplay()
+    {
+        TotalCoin = SaveDataManager.GetTotalCoins();
+        TotalCoins.text = $"Total Coins: {TotalCoin}";
+    }
     private void UpdateSaveActivePlayer(int index)
     {
         string currentActivePlayer = playerList.options[index].text;
         SaveDataManager.SetActivePlayer(currentActivePlayer);
     }
 
-    private void UpdatePlayerList()
+    private void UpdatePlayerList()//
     {
-        SaveDataManager.GetSavedPlayerProfiles(out List<string> players);
+        SaveDataManager.GetSavedPlayersProfiles(out List<string> players);
         playerList.ClearOptions();
         playerList.AddOptions(players);
     }
 
-    public void StartGame()
+    public void StartGame()//
     {
         GameplayStatics.GetGameMode().LoadFirstScene();
     }
-
-    public void BackToMainMenu()
+    public void BackToMainMenu()//
     {
         menuSwitcher.SetActiveUI(mainMenu);
     }
 
-    public void GoToHowToPlayMenu()
+    public void GoToHowToPlayMenu()//
     {
         menuSwitcher.SetActiveUI(howToPlayMenu);
     }
 
-    public void GoToLeaderBoardMenu()
+    public void GoToLeaderBoardMenu()//
     {
         menuSwitcher.SetActiveUI(leaderBoardMenu);
     }
 
-    public void QuitGame()
+    public void GoStoreMenu()//
+    {
+        menuSwitcher.SetActiveUI(storeMenu);
+    }
+
+    public void QuitGame()//
     {
         GameplayStatics.GetGameMode().QuitGame();
     }
 
-    public void SwitchToPlayerProfileMenu()
+    public void SwitchToPlayerProfileMenu()//
     {
         menuSwitcher.SetActiveUI(createPlayerProfileMenu);
     }
 
-    public void AddPlayerProfile()
+    public void AddPlayerProfile()//
     {
         string newPlayerName = newPlayerNameField.text;
         SaveDataManager.SavePlayerProfile(newPlayerName);
@@ -72,7 +101,7 @@ public class MainMenuUI : MonoBehaviour
         BackToMainMenu();
     }
 
-    public void DeleteSelectedPlayerProfile()
+    public void DeleteSelectedPlayerProfile()//
     {
         if (playerList.options.Count != 0)
         {

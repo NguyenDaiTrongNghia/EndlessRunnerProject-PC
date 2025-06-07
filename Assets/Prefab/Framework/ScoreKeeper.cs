@@ -13,6 +13,7 @@ public class ScoreKeeper : MonoBehaviour
     public event OnTimeChanged onTimeChanged;
     public float timeScore;
 
+    public int collectedCoins => coin;
     public float TimeScore
     {
         get { return timeScore; }
@@ -34,5 +35,4 @@ public class ScoreKeeper : MonoBehaviour
         timeScore += Time.deltaTime;
         onTimeChanged?.Invoke(timeScore);
     }
-    
 }

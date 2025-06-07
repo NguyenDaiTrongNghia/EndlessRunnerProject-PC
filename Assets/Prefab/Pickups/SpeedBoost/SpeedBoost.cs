@@ -6,6 +6,10 @@ public class SpeedBoost : Pickup
 {
     [SerializeField] float SpeedEffect;
     [SerializeField] float SpeedEffectDuration;
+    private void Start()
+    {
+        SpeedEffectDuration = SaveDataManager.GetPowerUpDuration("SpeedBoostDuration");
+    }
     protected override void PickedUpBy(GameObject picker)
     {
         SpeedControl speedController = FindObjectOfType<SpeedControl>();

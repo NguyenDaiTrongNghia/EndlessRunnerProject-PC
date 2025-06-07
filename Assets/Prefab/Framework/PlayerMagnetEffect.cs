@@ -8,21 +8,13 @@ public class PlayerMagnetEffect : MonoBehaviour
     [SerializeField] float magnetRadius = 10f;
 
     private bool isMagnetActive = false;
-    private float timer = 0f;
+    private Coroutine magnetCoroutine;
     public event Action<float> OnMagnetStarted;
     public event Action OnMagnetEnded;
     void Update()
     {
         if (isMagnetActive)
         {
-            timer -= Time.deltaTime;
-            if (timer <= 0f)
-            {
-                isMagnetActive = false;
-                OnMagnetEnded?.Invoke();
-                return;
-            }
-
             AttractCoins();
         }
     }
@@ -30,8 +22,20 @@ public class PlayerMagnetEffect : MonoBehaviour
     public void ActivateMagnet(float duration)
     {
         isMagnetActive = true;
-        timer = duration;
+        if (magnetCoroutine != null)
+        {
+            StopCoroutine(magnetCoroutine);
+        }
         OnMagnetStarted?.Invoke(duration);
+        magnetCoroutine = StartCoroutine(RemoveMagnet(duration));
+    }
+
+    IEnumerator RemoveMagnet(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        isMagnetActive = false;
+        magnetCoroutine = null;
+        OnMagnetEnded?.Invoke();
     }
 
     void AttractCoins()

@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 610a18c036d4b1a44b765cdd24b05837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SpawnInterval: 4.32
+  _SpawnInterval: 39.2
   movementComp: {fileID: 4826627929051461277}
   coinEffect: 0
-  magnetDuration: 20
+  magnetDuration: 5
 --- !u!114 &4826627929051461277
 MonoBehaviour:
   m_ObjectHideFlags: 0

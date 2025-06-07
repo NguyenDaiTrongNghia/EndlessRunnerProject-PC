@@ -124,9 +124,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Lerping 
-        float TransformX = Mathf.Lerp(transform.position.x, Destination.x, Time.deltaTime * MoveSpeed);
-        transform.position = new Vector3(TransformX, transform.position.y, transform.position.z);
+        
         //ground check
         if (!isOnGround())
         {
@@ -139,6 +137,12 @@ public class Player : MonoBehaviour
             animator.SetBool("IsOnGround", true);
             //Debug.Log("Player is on ground ");
         }
+    }
+    private void FixedUpdate()
+    {
+        //Lerping 
+        float TransformX = Mathf.Lerp(transform.position.x, Destination.x, Time.deltaTime * MoveSpeed);
+        transform.position = new Vector3(TransformX, transform.position.y, transform.position.z);
     }
     //Camera follow player
     private void LateUpdate()//
@@ -154,6 +158,7 @@ public class Player : MonoBehaviour
     }
     //JumpBoost function
     private bool isJumpBoosted = false;
+    private Coroutine jumpBoostCoroutine;
     public event Action<float> OnJumpBoostStarted;
     public event Action OnJumpBoostEnded;
     public void ChangeJumpHeight(float JumpChange, float duration)
@@ -162,9 +167,14 @@ public class Player : MonoBehaviour
         {
             isJumpBoosted = true;
             JumpHeight += JumpChange;
-            OnJumpBoostStarted?.Invoke(duration);
-            StartCoroutine(RemoveSpeedChange(JumpChange, duration));
         }
+        if (jumpBoostCoroutine != null)
+        {
+            StopCoroutine(jumpBoostCoroutine);
+        }
+        
+        OnJumpBoostStarted?.Invoke(duration);
+        jumpBoostCoroutine = StartCoroutine(RemoveSpeedChange(JumpChange, duration));
     }
 
     IEnumerator RemoveSpeedChange(float JumpChangeAtm, float waitTime)
@@ -172,6 +182,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         JumpHeight -= JumpChangeAtm;
         isJumpBoosted = false;
+        jumpBoostCoroutine = null;
         OnJumpBoostEnded?.Invoke();//Notify listeners
     }
 }

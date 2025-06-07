@@ -5,7 +5,7 @@ using TMPro;
 
 public class PowerUpDisplay : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI labelText;
+    [SerializeField] TextMeshProUGUI powerupsText;
 
     private Coroutine countdownCoroutine;
 
@@ -13,26 +13,25 @@ public class PowerUpDisplay : MonoBehaviour
     {
         gameObject.SetActive(true);
         if (countdownCoroutine != null)
+        {
             StopCoroutine(countdownCoroutine);
+        }
         countdownCoroutine = StartCoroutine(UpdateCountdown(label, duration));
     }
 
     private IEnumerator UpdateCountdown(string label, float duration)
     {
-        float remaining = duration;
-        while (remaining > 0)
+        //float remaining = duration;
+        while (duration > 0)
         {
-            labelText.SetText($"{label}: {remaining:F1}s");
+            powerupsText.SetText($"{label}: {duration:F0}s");
             yield return null;
-            remaining -= Time.deltaTime;
+            duration -= Time.deltaTime;
         }
-        //gameObject.SetActive(false);
     }
 
     public void Stop()
     {
-        if (countdownCoroutine != null)
-            StopCoroutine(countdownCoroutine);
         gameObject.SetActive(false);
     }
 }

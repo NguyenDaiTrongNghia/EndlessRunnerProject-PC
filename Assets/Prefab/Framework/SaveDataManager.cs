@@ -40,24 +40,24 @@ public static class SaveDataManager
             this.entries = entries;
         }
     }
-    static string GetSaveDir()
+    static string GetSaveDir()//
     {
         return Application.persistentDataPath;
     }
 
-    static string GetPlayerProfileFileName()
+    static string GetPlayerProfileFileName()//
     {
         return "players.json";
     }
 
-    static string GetPlayerProfileSaveDir()
+    static string GetPlayerProfileSaveDir()//
     {
         return GetSaveDir() + "/" + GetPlayerProfileFileName();
     }
 
-    public static void SavePlayerProfile(string playerName)
+    public static void SavePlayerProfile(string playerName)//
     {
-        GetSavedPlayerProfiles(out List<string> players);
+        GetSavedPlayersProfiles(out List<string> players);
         if (players.Contains(playerName))
         {
             return;
@@ -66,59 +66,65 @@ public static class SaveDataManager
         SavePlayerProfilesFromList(players);
     }
 
-    private static void SavePlayerProfilesFromList(List<string> players)
+    private static void SavePlayerProfilesFromList(List<string> players)//
     {
         PlayerProfilesData data = new PlayerProfilesData(players);
         string dataJSON = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetPlayerProfileSaveDir(), dataJSON);
     }
 
-    public static bool GetSavedPlayerProfiles(out List<string> data)
+    public static bool GetSavedPlayersProfiles(out List<string> data)
     {
-        if (File.Exists(GetPlayerProfileSaveDir()))
+        if (File.Exists(GetPlayerProfileSaveDir()))//
         {
-            string dataJSON = File.ReadAllText(GetPlayerProfileSaveDir());
-            PlayerProfilesData loadedData = JsonUtility.FromJson<PlayerProfilesData>(dataJSON);
-            data = loadedData.playerNames;
-            return true;
+            string dataJSON = File.ReadAllText(GetPlayerProfileSaveDir());//
+            PlayerProfilesData loadedData = JsonUtility.FromJson<PlayerProfilesData>(dataJSON);//
+            data = loadedData.playerNames;//
+            return true;//
         }
-        data = new List<string>();
-        return false;        
+        data = new List<string>();//
+        return false;        //
     }
 
-    public static void DeletePlayerProfile(string playerName)
+    public static void DeletePlayerProfile(string playerName)//
     {
-        GetSavedPlayerProfiles(out List<string> players);
-        players.Remove(playerName);
-        SavePlayerProfilesFromList(players);
+        GetSavedPlayersProfiles(out List<string> players);//
+        players.Remove(playerName);//
+        SavePlayerProfilesFromList(players);//
     }
     
     public static void SaveNewLeadBoardEntry(string name, DateTime date, float score)
     {
-        LeaderBoardEntryData newEntry = new LeaderBoardEntryData(name, date, score);
-        GetSavedLeaderBoardEntryList(out List<LeaderBoardEntryData> entries);
-        if(entries.Count == 0)
+        LeaderBoardEntryData newEntry = new LeaderBoardEntryData(name, date, score);//
+        GetSavedLeaderBoardEntryList(out List<LeaderBoardEntryData> entries);//
+
+        int existingIndex = entries.FindIndex(e => e.name == name);
+
+        if (existingIndex != -1)
         {
-            entries.Add(newEntry);
+            if (score > entries[existingIndex].score)
+            {
+                entries[existingIndex] = newEntry;
+            }
+            else
+            {
+                return;
+            }
         }
         else
         {
-            for(int i = 0; i < entries.Count; i++)
-            {
-                if(newEntry.score > entries[i].score)
-                {
-                    entries.Insert(i, newEntry);
-                    break;
-                }
-            }
+            entries.Add(newEntry);
         }
-        
 
-        LeaderboardListData data = new LeaderboardListData(entries);
-        string dataJSON = JsonUtility.ToJson(data, true);
-        File.WriteAllText(GetLeaderBoardSaveDir(), dataJSON);
+        // Sort algorithm
+        entries.Sort((a, b) => b.score.CompareTo(a.score));
+
+
+        LeaderboardListData data = new LeaderboardListData(entries);//
+        string dataJSON = JsonUtility.ToJson(data, true);//
+        File.WriteAllText(GetLeaderBoardSaveDir(), dataJSON);//
     }
-    public static bool GetSavedLeaderBoardEntryList(out List<LeaderBoardEntryData> entries)
+    public static bool GetSavedLeaderBoardEntryList(out List<LeaderBoardEntryData> entries)//
     {
         if (File.Exists(GetLeaderBoardSaveDir()))
         {
@@ -132,19 +138,19 @@ public static class SaveDataManager
         return false;
     }
 
-    private static string GetLeaderBoardSaveDir()
+    private static string GetLeaderBoardSaveDir()//
     {
         return GetSaveDir() + "/" + GetLeaderBoardFileName();
     }
 
-    private static string GetLeaderBoardFileName()
+    private static string GetLeaderBoardFileName()//
     {
         return "LeaderBoard.lb";
     }
 
-    public static void SetActivePlayer(string playerName)
+    public static void SetActivePlayer(string playerName)//
     {   
-        GetSavedPlayerProfiles(out List<string> players);
+        GetSavedPlayersProfiles(out List<string> players);
         if (players.Remove(playerName))
         {
             players.Insert(0, playerName);
@@ -152,13 +158,45 @@ public static class SaveDataManager
         }       
     }
 
-    public static string GetActivePlayerName()
+    public static string GetActivePlayerName()//
     {
-        GetSavedPlayerProfiles(out List<string> players);
+        GetSavedPlayersProfiles(out List<string> players);
         if(players.Count != 0)
         {
             return players[0];
         }
-        return "Default Player";
+        return "Anonymous Player";
+    }
+
+    private const string TotalCoinsKey = "TotalCoins";
+
+    //Coin System
+    public static int GetTotalCoins()
+    {
+        return PlayerPrefs.GetInt("TotalCoins", 0);
+    }
+
+    public static void AddCoins(int coinsToAdd)
+    {
+        int current = GetTotalCoins();
+        PlayerPrefs.SetInt("TotalCoins", current + coinsToAdd);
+        PlayerPrefs.Save();
+    }
+
+    public static void ResetData()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+    // Power-up upgrade keys
+    public static void SavePowerUpDuration(string key, float duration)
+    {
+        PlayerPrefs.SetFloat(key, duration);
+        PlayerPrefs.Save();
+    }
+
+    public static float GetPowerUpDuration(string key, float defaultDuration = 5.0f)
+    {
+        return PlayerPrefs.GetFloat(key, defaultDuration);
     }
 }

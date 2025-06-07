@@ -8,6 +8,7 @@ public class SpeedControl : MonoBehaviour
     public delegate void OnGlobalSpeedChanged(float newSpeed);//
     [SerializeField] float GlobalSpeed = 15f;//
     private bool isSpeedModified = false; //
+    private Coroutine speedBoostCoroutine;
 
     public event OnGlobalSpeedChanged onGlobalSpeedChanged;//
 
@@ -21,10 +22,14 @@ public class SpeedControl : MonoBehaviour
         {
             isSpeedModified = true;
             GlobalSpeed += SpeedChange;
-            InformSpeedChange();
-            OnSpeedBoostStarted?.Invoke(duration);
-            StartCoroutine(RemoveSpeedChange(SpeedChange, duration));
         }
+        if (speedBoostCoroutine != null)
+        {
+            StopCoroutine(speedBoostCoroutine);
+        }
+        InformSpeedChange();
+        OnSpeedBoostStarted?.Invoke(duration);
+        speedBoostCoroutine = StartCoroutine(RemoveSpeedChange(SpeedChange, duration));
     }
 
     IEnumerator RemoveSpeedChange(float SpeedChangeAmt, float waitTime)//
@@ -32,6 +37,7 @@ public class SpeedControl : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         GlobalSpeed -= SpeedChangeAmt;
         isSpeedModified = false;
+        speedBoostCoroutine = null;
         OnSpeedBoostEnded?.Invoke();
         InformSpeedChange();
     }

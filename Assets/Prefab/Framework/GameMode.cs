@@ -8,17 +8,21 @@ public class GameMode : MonoBehaviour
 {
     public delegate void OnGameOver();
 
-    [SerializeField] int MainMenuSceneBuildIndex = 0;
-    [SerializeField] int FirstSceneIndex = 1;
+    [SerializeField] int MainMenuSceneBuildIndex = 0;//
+    [SerializeField] int FirstSceneIndex = 1;//
 
     public event OnGameOver onGameOver;
 
-    bool bIsGamePause = false;
-    bool bIsGameOver = false;
+    bool bIsGamePause = false;//
+    bool bIsGameOver = false;//
     public void GameOver()
     {
         SetGamePause(true);
         UpdateLeaderBoard();
+
+        // Add collected coins to total coins
+        int collectedCoins = GetComponent<ScoreKeeper>().collectedCoins;
+        SaveDataManager.AddCoins(collectedCoins);
 
         bIsGameOver = true;
         onGameOver?.Invoke();
@@ -30,12 +34,12 @@ public class GameMode : MonoBehaviour
         SaveDataManager.SaveNewLeadBoardEntry(SaveDataManager.GetActivePlayerName(), DateTime.Now, score);
     }
 
-    internal void LoadFirstScene()
+    internal void LoadFirstScene()//
     {
         LoadScene(FirstSceneIndex);
     }
 
-    public void SetGamePause(bool bIsPaused)
+    public void SetGamePause(bool bIsPaused)//
     {
         if (bIsGameOver)
         {
@@ -54,7 +58,7 @@ public class GameMode : MonoBehaviour
         }
     }
 
-    internal void TogglePause()
+    internal void TogglePause()//
     {
         if (IsGamePaused())
         {
@@ -65,29 +69,29 @@ public class GameMode : MonoBehaviour
         }
     }
 
-    public bool IsGamePaused()
+    public bool IsGamePaused()//
     {
         return bIsGamePause;
     }
 
-    public void BackToMainMenu()
+    public void BackToMainMenu()//
     {
         LoadScene(MainMenuSceneBuildIndex);
     }
 
-    private void LoadScene(int sceneBuidIndex)
+    private void LoadScene(int sceneBuidIndex)//
     {
         bIsGameOver = false;
         SetGamePause(false);
         SceneManager.LoadScene(sceneBuidIndex);
     }
 
-    internal void RestartLevel()
+    internal void RestartLevel()//
     {
         LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    internal bool IsGameOver()
+    internal bool IsGameOver()//
     {
         return bIsGameOver;
     }

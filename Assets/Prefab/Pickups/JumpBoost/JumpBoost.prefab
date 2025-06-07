@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _SpawnInterval: 32.1
   movementComp: {fileID: 5629025206476730883}
-  scoreEffect: 0
+  coinEffect: 0
   JumpEffectDuration: 5
   JumpEffect: 1.5
 --- !u!114 &5629025206476730883
