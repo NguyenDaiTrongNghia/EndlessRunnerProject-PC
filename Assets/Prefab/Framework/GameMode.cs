@@ -31,7 +31,22 @@ public class GameMode : MonoBehaviour
     private void UpdateLeaderBoard()
     {
         float score = GetComponent<ScoreKeeper>().TimeScore;
-        SaveDataManager.SaveNewLeadBoardEntry(SaveDataManager.GetActivePlayerName(), DateTime.Now, score);
+        string playerName = SaveDataManager.GetActivePlayerName();
+        DateTime date = DateTime.Now;
+
+        // Save locally
+        SaveDataManager.SaveNewLeadBoardEntry(playerName, date, score);
+
+        // Save to Firebase
+        FirebaseManager firebase = FindObjectOfType<FirebaseManager>();
+        if (firebase != null)
+        {
+            firebase.UploadLeaderboardEntry(playerName, date, score);
+        }
+        else
+        {
+            Debug.LogWarning("FirebaseManager not found in the scene.");
+        }
     }
 
     internal void LoadFirstScene()//

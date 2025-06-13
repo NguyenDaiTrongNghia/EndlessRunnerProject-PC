@@ -8,12 +8,11 @@ public class Store : MonoBehaviour
     [SerializeField] TextMeshProUGUI JumpBoostText;
     [SerializeField] TextMeshProUGUI SpeedBoostText;
     [SerializeField] TextMeshProUGUI MagnetText;
-    [SerializeField] TextMeshProUGUI NotEnoughText;
-    [SerializeField] TextMeshProUGUI MaximumText;
+    //[SerializeField] TextMeshProUGUI NotEnoughText;
+    //[SerializeField] TextMeshProUGUI MaximumText;
     [SerializeField] MainMenuUI mainMenuUI;
-    [SerializeField] GameObject PanelNotEnough;
-    [SerializeField] GameObject PanelMaximum;
-    
+    [SerializeField] GameObject StorePanel;
+    [SerializeField] TextMeshProUGUI StoreText;
 
     [SerializeField] int UpgradeCost = 100;
     [SerializeField] float UpgradeIncrement = 5.0f;
@@ -23,8 +22,6 @@ public class Store : MonoBehaviour
     void Start()
     {
         UpdateUI();
-        PanelNotEnough.gameObject.SetActive(false);
-        PanelMaximum.gameObject.SetActive(false);
     }
     private void Update()
     {
@@ -76,25 +73,30 @@ public class Store : MonoBehaviour
             }
             else
             {
-                PanelNotEnough.gameObject.SetActive(true);
-                NotEnoughText.text = "Not enough coins to upgrade";
-                Debug.Log("Not enough coins to upgrade " + key);
+                StorePanel.gameObject.SetActive(true);
+                StoreText.text = "Not enough coins to upgrade";
+                //Debug.Log("Not enough coins to upgrade " + key);
             }
         }
         else
         {
-            PanelMaximum.gameObject.SetActive(true);
-            MaximumText.text = "Maximum upgrade reached";
-            Debug.Log("Maximum upgrade reached for " + key);
+            StorePanel.gameObject.SetActive(true);
+            StoreText.text = "Maximum upgrade reached";
+            //Debug.Log("Maximum upgrade reached for " + key);
         }
     }
 
-    public void CloseNotEnoughPanel()
+    public void CloseStorePanel()
     {
-        PanelNotEnough.gameObject.SetActive(false);
+        StorePanel.gameObject.SetActive(false);
     }
-    public void CloseMaximumPanel()
-    {
-        PanelMaximum.gameObject.SetActive(false);
-    }
+
+    //public void CloseNotEnoughPanel()
+    //{
+    //    PanelNotEnough.gameObject.SetActive(false);
+    //}
+    //public void CloseMaximumPanel()
+    //{
+    //    PanelMaximum.gameObject.SetActive(false);
+    //}
 }

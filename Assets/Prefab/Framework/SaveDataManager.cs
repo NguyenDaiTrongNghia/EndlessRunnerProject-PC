@@ -92,7 +92,7 @@ public static class SaveDataManager
         players.Remove(playerName);//
         SavePlayerProfilesFromList(players);//
     }
-    
+
     public static void SaveNewLeadBoardEntry(string name, DateTime date, float score)
     {
         LeaderBoardEntryData newEntry = new LeaderBoardEntryData(name, date, score);//
@@ -149,19 +149,19 @@ public static class SaveDataManager
     }
 
     public static void SetActivePlayer(string playerName)//
-    {   
+    {
         GetSavedPlayersProfiles(out List<string> players);
         if (players.Remove(playerName))
         {
             players.Insert(0, playerName);
             SavePlayerProfilesFromList(players);
-        }       
+        }
     }
 
     public static string GetActivePlayerName()//
     {
         GetSavedPlayersProfiles(out List<string> players);
-        if(players.Count != 0)
+        if (players.Count != 0)
         {
             return players[0];
         }
@@ -188,7 +188,7 @@ public static class SaveDataManager
         PlayerPrefs.DeleteAll();
     }
 
-    // Power-up upgrade keys
+    // Power-up upgrade
     public static void SavePowerUpDuration(string key, float duration)
     {
         PlayerPrefs.SetFloat(key, duration);
@@ -198,5 +198,29 @@ public static class SaveDataManager
     public static float GetPowerUpDuration(string key, float defaultDuration = 5.0f)
     {
         return PlayerPrefs.GetFloat(key, defaultDuration);
+    }
+
+    //SkinShop system
+
+    private const string UnlockedSkinsKey = "UnlockedSkin_";
+
+    public static void EquipSkinData(int index)
+    {
+        PlayerPrefs.SetInt("SelectedSkin", index);
+        PlayerPrefs.Save();
+    }
+
+    //Mark skin as unlocked
+    public static void UnlockSkin(int index)
+    {
+        PlayerPrefs.SetInt(UnlockedSkinsKey + index, 1);
+        PlayerPrefs.Save();
+    }
+
+    //Check if a skin is unlocked
+    public static bool IsSkinUnlocked(int index)
+    {
+        return PlayerPrefs.GetInt(UnlockedSkinsKey + index, index == 0 ? 1 : 0) == 1;
+        // Skin 0 is unlocked by default
     }
 }

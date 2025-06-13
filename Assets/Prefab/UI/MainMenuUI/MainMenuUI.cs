@@ -11,9 +11,11 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] Transform howToPlayMenu;
     [SerializeField] Transform leaderBoardMenu;
     [SerializeField] Transform createPlayerProfileMenu;
+    [SerializeField] Transform PlayerProfileMenu;
     [SerializeField] TMP_InputField newPlayerNameField;
     [SerializeField] TMP_Dropdown playerList;
     [SerializeField] Transform storeMenu;
+    [SerializeField] Transform skinShop;
 
     [SerializeField] TextMeshProUGUI TotalCoins;
     [SerializeField] int TotalCoin;
@@ -66,21 +68,31 @@ public class MainMenuUI : MonoBehaviour
     public void BackToMainMenu()//
     {
         menuSwitcher.SetActiveUI(mainMenu);
+        PlayerProfileMenu.gameObject.SetActive(true);
     }
 
     public void GoToHowToPlayMenu()//
     {
         menuSwitcher.SetActiveUI(howToPlayMenu);
+        PlayerProfileMenu.gameObject.SetActive(false);
     }
 
     public void GoToLeaderBoardMenu()//
     {
         menuSwitcher.SetActiveUI(leaderBoardMenu);
+        PlayerProfileMenu.gameObject.SetActive(false);
     }
 
     public void GoStoreMenu()//
     {
         menuSwitcher.SetActiveUI(storeMenu);
+        PlayerProfileMenu.gameObject.SetActive(false);
+    }
+    
+    public void GoSkinShopMenu()
+    {
+        menuSwitcher.SetActiveUI(skinShop);
+        PlayerProfileMenu.gameObject.SetActive(false);
     }
 
     public void QuitGame()//

@@ -30,6 +30,30 @@ public class Player : MonoBehaviour
     //Camera reference
     Camera playerCamera;
     Vector3 playerCameraOffset;
+
+    [SerializeField] private GameObject[] characterModels;
+
+    void Awake()
+    {
+        int selectedSkin = PlayerPrefs.GetInt("SelectedSkin", 0); // default to skin 0
+        EquipSelectedSkin(selectedSkin);
+    }
+
+    private void EquipSelectedSkin(int index)
+    {
+        for (int i = 0; i < characterModels.Length; i++)
+        {
+            if (i == index)
+            {
+                characterModels[i].SetActive(true);
+            }
+            else
+            {
+                Destroy(characterModels[i]);
+                characterModels[i] = null;
+            }
+        }
+    }
     private void OnEnable()
     {
         if(playerInput==null)
@@ -39,6 +63,7 @@ public class Player : MonoBehaviour
         playerInput.Enable();
 
     }
+
 
     private void OnDisable()
     {
@@ -123,8 +148,7 @@ public class Player : MonoBehaviour
     }
     // Update is called once per frame
     void Update()
-    {
-        
+    { 
         //ground check
         if (!isOnGround())
         {
