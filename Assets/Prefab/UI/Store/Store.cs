@@ -37,9 +37,9 @@ public class Store : MonoBehaviour
         float speedDuration = SaveDataManager.GetPowerUpDuration("SpeedBoostDuration");
         float magnetDuration = SaveDataManager.GetPowerUpDuration("MagnetDuration");
 
-        JumpBoostText.text = $"Jump: {jumpDuration:F0}s";
-        SpeedBoostText.text = $"Speed: {speedDuration:F0}s";
-        MagnetText.text = $"Magnet: {magnetDuration:F0}s";
+        JumpBoostText.SetText($"Jump: {jumpDuration:F0}");
+        SpeedBoostText.SetText($"Speed: {speedDuration:F0}");
+        MagnetText.SetText($"Magnet: {magnetDuration:F0}");
     }
     public void BuyJumpBoostUpgrade()
     {
@@ -61,7 +61,7 @@ public class Store : MonoBehaviour
         int currentCoins = SaveDataManager.GetTotalCoins();
         float currentDuration = SaveDataManager.GetPowerUpDuration(key);
 
-        if (currentDuration < 60f)
+        if (currentDuration < 30f)
         {
             if (currentCoins >= UpgradeCost)
             {
