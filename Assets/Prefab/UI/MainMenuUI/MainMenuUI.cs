@@ -14,46 +14,20 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] TMP_InputField newPlayerNameField;
     [SerializeField] TMP_Dropdown playerList;
     [SerializeField] Transform storeMenu;
-<<<<<<< Updated upstream
-=======
-    [SerializeField] Transform skinShop;
-    [SerializeField] GameObject PlayerNameExistPanel;
->>>>>>> Stashed changes
 
     [SerializeField] TextMeshProUGUI TotalCoins;
     [SerializeField] int TotalCoin;
 
-    public static MainMenuUI Instance { get; private set; }
-    private void Awake()
-    {
-        Instance = this;
-    }
+
 
     private void Start()
     {
-        ClosePlayerNameExistPanel();
+
         //PlayerPrefs.SetFloat("JumpBoostDuration", 70f);
         PlayerPrefs.Save();
         UpdatePlayerList();//
         playerList.onValueChanged.AddListener(UpdateSaveActivePlayer);//
         UpdateTotalCoinDisplay();
-
-        // Check if any player profiles exist; if not, force create profile menu
-        if (!SaveDataManager.HasPlayerProfiles())
-        {
-            menuSwitcher.SetActiveUI(createPlayerProfileMenu);
-            PlayerProfileMenu.gameObject.SetActive(false);
-        }
-    }
-
-    public void DisplayPlayerNameExistPanel()
-    {
-        PlayerNameExistPanel.SetActive(true);
-    }
-  
-    public void ClosePlayerNameExistPanel()
-    {
-        PlayerNameExistPanel.SetActive(false);
     }
     public void AddCoin()
     {
@@ -87,19 +61,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void StartGame()//
     {
-        // Check if an active player exists
-        string activePlayer = SaveDataManager.GetActivePlayerName();
-        if (string.IsNullOrEmpty(activePlayer))
-        {
-            // No profile exists, redirect to create profile menu
-            menuSwitcher.SetActiveUI(createPlayerProfileMenu);
-            PlayerProfileMenu.gameObject.SetActive(false);
-        }
-        else
-        {
-            // Profile exists, start the game
-            GameplayStatics.GetGameMode().LoadFirstScene();
-        }
+        GameplayStatics.GetGameMode().LoadFirstScene();
     }
     public void BackToMainMenu()//
     {
@@ -134,11 +96,9 @@ public class MainMenuUI : MonoBehaviour
     public void AddPlayerProfile()//
     {
         string newPlayerName = newPlayerNameField.text;
-        SaveDataManager.SavePlayerProfile(newPlayerName, () =>
-        {
-            UpdatePlayerList();
-            BackToMainMenu();
-        });
+        SaveDataManager.SavePlayerProfile(newPlayerName);
+        UpdatePlayerList();
+        BackToMainMenu();
     }
 
     public void DeleteSelectedPlayerProfile()//
@@ -147,14 +107,7 @@ public class MainMenuUI : MonoBehaviour
         {
             string playerName = playerList.options[playerList.value].text;
             SaveDataManager.DeletePlayerProfile(playerName);
-            FirebaseManager.Instance.DeletePlayerProfileFromFirebase(playerName, () =>
-            {
-                // After deleting player from Firebase, remove associated leaderboard entries
-                FirebaseManager.Instance.DeleteLeaderboardEntriesByName(playerName, () =>
-                {
-                    UpdatePlayerList();
-                });
-            });
-        }
+            UpdatePlayerList();
+        }       
     }
 }

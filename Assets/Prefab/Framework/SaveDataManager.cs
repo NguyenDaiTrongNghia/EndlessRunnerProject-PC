@@ -55,39 +55,15 @@ public static class SaveDataManager
         return GetSaveDir() + "/" + GetPlayerProfileFileName();
     }
 
-    public static void SavePlayerProfile(string playerName, Action onSuccess = null)
+    public static void SavePlayerProfile(string playerName)//
     {
-        // Check local JSON first
         GetSavedPlayersProfiles(out List<string> players);
         if (players.Contains(playerName))
         {
-            //Debug.Log("Player already exists locally.");
-            MainMenuUI.Instance.DisplayPlayerNameExistPanel();
             return;
         }
-
-        // Check Firebase for existing player
-        FirebaseManager.Instance.CheckPlayerExists(playerName, (exists) =>
-        {
-            if (exists)
-            {
-                Debug.Log("Player already exists in Firebase.");
-                MainMenuUI.Instance.DisplayPlayerNameExistPanel();
-            }
-            else
-            {
-                // Save to local JSON
-                players.Insert(0, playerName);
-                SavePlayerProfilesFromList(players);
-
-                // Save to Firebase
-                FirebaseManager.Instance.SavePlayerProfileToFirebase(playerName, () =>
-                {
-                    Debug.Log($"Player {playerName} saved to both local JSON and Firebase.");
-                    onSuccess?.Invoke();
-                });
-            }
-        });
+        players.Insert(0, playerName);
+        SavePlayerProfilesFromList(players);
     }
 
     private static void SavePlayerProfilesFromList(List<string> players)//
@@ -109,19 +85,12 @@ public static class SaveDataManager
         data = new List<string>();//
         return false;        //
     }
-    public static bool HasPlayerProfiles()
-    {
-        GetSavedPlayersProfiles(out List<string> players);
-        return players.Count > 0;
-    }
 
     public static void DeletePlayerProfile(string playerName)//
     {
         GetSavedPlayersProfiles(out List<string> players);//
         players.Remove(playerName);//
         SavePlayerProfilesFromList(players);//
-
-        FirebaseManager.Instance.DeletePlayerProfileFromFirebase(playerName);
     }
     
     public static void SaveNewLeadBoardEntry(string name, DateTime date, float score)
@@ -189,14 +158,14 @@ public static class SaveDataManager
         }       
     }
 
-    public static string GetActivePlayerName()
+    public static string GetActivePlayerName()//
     {
         GetSavedPlayersProfiles(out List<string> players);
         if(players.Count != 0)
         {
             return players[0];
         }
-        return string.Empty; // No anonymous player allowed
+        return "Anonymous Player";
     }
 
     private const string TotalCoinsKey = "TotalCoins";
